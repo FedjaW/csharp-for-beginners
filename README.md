@@ -1,2 +1,2 @@
-# csharp-for-beginners
+# C# for beginners
 My workspace to learn C# and document my learnings.
