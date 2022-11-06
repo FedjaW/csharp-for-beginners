@@ -16,9 +16,9 @@ public class Basics
     [Fact]
     public void Work_With_Naive_Hero()
     {
-        // Can initialize props when create the object.
+        // Can initialize props when creating the object.
         // Everybody can set props as he likes (might be bad!).
-        // BUT we can NOT enforce initialization of props.  
+        // And we can NOT enforce initialization of props (bad!).
         var h = new HeroNaive
         {
             Name = "FedjaW",
