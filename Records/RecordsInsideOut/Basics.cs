@@ -67,13 +67,13 @@ public class Basics
         // default values to ctor parameters, the user of the record can choose
         // between ctor params and prop initializers.
         public string Name { get; init; } // using init properties -> caller can set propertie when creating it initially
-        public string Universe { get; init;  }
+        public string Universe { get; init; }
         public bool CanFly { get; init; }
 
         public bool Equals(CompareableHero? other)
-            => other != null && 
-            Name == other.Name && 
-            Universe == other.Universe && 
+            => other != null &&
+            Name == other.Name &&
+            Universe == other.Universe &&
             CanFly == other.CanFly;
 
         public override bool Equals(object? obj)
@@ -103,11 +103,109 @@ public class Basics
     #endregion
 
     #region Cloning Heros
+    private class CloneableHero : IEquatable<CloneableHero>
+    {
+        public CloneableHero(string name = "", string universe = "", bool canFly = false)
+            => (Name, Universe, CanFly) = (name, universe, canFly);
+
+        public string Name { get; init; } // using init properties -> caller can set propertie when creating it initially
+        public string Universe { get; init; }
+        public bool CanFly { get; init; }
+
+        public bool Equals(CloneableHero? other)
+            => other != null &&
+            Name == other.Name &&
+            Universe == other.Universe &&
+            CanFly == other.CanFly;
+
+        public override bool Equals(object? obj)
+            => obj != null && obj is CloneableHero h && Equals(h);
+
+        public override int GetHashCode() => HashCode.Combine(Name, Universe, CanFly);
+
+        // We add a convinience funcation to the class that makes it simple to clone objects
+        public CloneableHero Clone() => new(Name, Universe, CanFly);
+    }
+
+    [Fact]
+    public void Work_With_Cloneable_Hero()
+    {
+        var h1 = new CloneableHero("Black Noir", "DC", false);
+        var h2 = h1.Clone();
+        Assert.Equal(h1, h2);
+
+        // This doesn't work because Name is init-only property
+        // h2.Name = "Lamplighter";
+    }
     #endregion
 
     #region Deconstruction
+    private class DeconstructableHero : IEquatable<DeconstructableHero>
+    {
+        public DeconstructableHero(string name = "", string universe = "", bool canFly = false)
+            => (Name, Universe, CanFly) = (name, universe, canFly);
+        public string Name { get; init; }
+        public string Universe { get; init; }
+        public bool CanFly { get; init; }
+        public bool Equals(DeconstructableHero? other)
+            => other != null && Name == other.Name && Universe == other.Universe && CanFly == other.CanFly;
+        public override bool Equals(object? obj)
+            => obj != null && obj is DeconstructableHero h && Equals(h);
+        public override int GetHashCode() => HashCode.Combine(Name, Universe, CanFly);
+        public DeconstructableHero Clone() => new(Name, Universe, CanFly);
+
+        // We add a deconstructor to the class.
+        // Be aware: this is a de-con-stuctor and not a de-structor, both do exist in csharp.
+        public void Deconstruct(out string name, out string universe, out bool canFly)
+            => (name, universe, canFly) = (Name, Universe, CanFly);
+    }
+
+    [Fact]
+    public void Work_With_Deconstructable_Hero()
+    {
+        var h1 = new DeconstructableHero("Translucent", "DC", false);
+        var (name, _, canFly) = h1; // _ means ignore
+        Assert.Equal("Translucent", name);
+        Assert.False(canFly);
+    }
     #endregion
 
-    #region Pure magic
+    #region Records
+    // RECORDS SOLVES ALL THAT PROBLEMS!
+    private record MightyHero(string Name = "", string Universe = "", bool CanFly = false);
+
+    [Fact]
+    public void Work_With_RecordHero()
+    {
+        // Creation using ctor
+        var h1 = new MightyHero("Homelander", "DC", true);
+
+        // Creation with property initializations
+        var h2 = new MightyHero { Name = "The Deep", Universe = "DC" };
+
+        // Deconstruction
+        var (name, _, canFly) = h2;
+        Assert.Equal("The Deep", name);
+        Assert.False(canFly);
+
+        // Cloning with changes
+        var h3 = h1 with { Name = "Stormfront" };
+        Assert.Equal("DC", h3.Universe);
+
+        // Creating and initializing collections
+        MightyHero tick;
+        _ = new[]
+        {
+            tick = new MightyHero("The Tick", CanFly: false),
+            tick with { Name = "The Terror" }
+        };
+
+        // Value-based equality
+        var anotherH1 = new MightyHero("Homelander", "DC", true);
+        Assert.Equal(h1, anotherH1);
+
+        // Instances of records are still immutable, so this doesn't work:
+        // h1.Name = "Starlight";
+    }
     #endregion
 }
