@@ -1,19 +1,15 @@
 ﻿using System.Threading.Tasks;
 using System.Linq;
 
+
+// Riddle: 
+// What will be printed to the console?
 IEnumerable<Task> tasks = Enumerable.Range(0, 2)
     .Select(_ => Task.Run(() => Console.Write("*")));
 
 await Task.WhenAll(tasks);
 
 Console.Write($"{tasks.Count()} stars!");
-
-// Riddle: 
-// What will be printed to the console?
-// A. **2 stars!
-// B. **2 stars!**
-// C. ****2 stars!
-// D. not defined
 
 // Explanation:
 // In this example are multiple tricks hidden
@@ -41,16 +37,16 @@ IEnumerable<Task> tasks2 = Enumerable.Range(0, 2)
 await Task.WhenAll(tasks2);
 
 Console.Write($"{tasks2.Count()} stars!");
-// We force the task to take more time then the console.write() methods takes to execute
-// so the taks are still running on the threadpool and the last two stars will no be printed.
+// We force the task to take more time then the Console.write() methods takes to execute
+// so the tasks are still running on the threadpool and the last two stars will not be printed.
 // ----------------------------------------------------------------------------------------------
 
 Console.WriteLine();
 Console.WriteLine("--------------");
 
 // Better way to do things is to create a list
-// The list will hold the tasks in a dedicated memory
-// Then the list will not be enumerated multiple times
+// The list will hold the Count as a field
+// and does not need to iterate over it again to count the tasks.
 IEnumerable<Task> tasks3 = Enumerable.Range(0, 2).ToList()
     .Select(_ => Task.Run(async () =>
     {
@@ -63,4 +59,11 @@ await Task.WhenAll(tasks3);
 Console.Write($"{tasks3.Count()} stars!");
 // ----------------------------------------------------------------------------------------------
 
-// Btw. The answere is D.
+
+// Btw. The answere to the riddle is:
+// It will always print: **
+// because the two tasks are awaited.
+// Then it depends how fast the tasks are executed.
+// **2 stars!** or
+// ****2 stars! or
+// ***2 stars!*
