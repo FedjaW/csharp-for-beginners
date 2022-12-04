@@ -1,3 +1,5 @@
+using Xunit;
+
 public class InheritanceAndMembers
 {
     private interface IAmHero
@@ -13,6 +15,6 @@ public class InheritanceAndMembers
     public void Work_With_Hero_Interface()
     {
         IAmHero h = new Hero("Groot", "Marvel", false);
-        Assert.Equal("Groot", h.name)
+        Assert.Equal("Groot", h.Name);
     } 
 }
