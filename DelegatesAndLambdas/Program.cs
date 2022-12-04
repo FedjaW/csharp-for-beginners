@@ -1,4 +1,4 @@
-﻿// Q: What is a delegsate?
+﻿// Q: What is a delegate?
 // A: A delegate is a type definition for functions like a class is a type definition for an object.
 
 MathOp f = Add; // Assigning a pointer (no brackets in place like Add())
