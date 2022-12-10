@@ -37,8 +37,20 @@ Console.WriteLine(heroesFiltered);
 //     }
 // }
 
-// WOW! This is the "Where" clause from LINQ!
-IEnumerable<T> Filter<T>(IEnumerable<T> items, Filter<T> f)
+// WOW! This is very close to the "where" clause from LINQ!
+// IEnumerable<T> Filter<T>(IEnumerable<T> items, Filter<T> f)
+// {
+//     foreach (var item in items)
+//     {
+//         if(f(item))
+//         {
+//             yield return item;
+//         }
+//     }
+// }
+
+// WOW! This is even more close to the "where" clause from LINQ!
+IEnumerable<T> Filter<T>(IEnumerable<T> items, Func<T, bool> f)
 {
     foreach (var item in items)
     {
@@ -49,6 +61,6 @@ IEnumerable<T> Filter<T>(IEnumerable<T> items, Filter<T> f)
     }
 }
 
-delegate bool Filter<T>(T h);
+// delegate bool Filter<T>(T h); // used in step1 and step2 (see above)
 
 record Hero(string FirstName, string LastName, string HeroName, bool CanFly);
