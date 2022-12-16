@@ -1,5 +1,4 @@
-﻿
-
+﻿// A higher order function is a function that takes and or returns a function.
 
 Func<int, int> calculator = CreateCalculator();
 System.Console.WriteLine(calculator(2));

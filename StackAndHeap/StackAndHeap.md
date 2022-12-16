@@ -35,6 +35,9 @@ int CalculateSomethingRecursive(int n)
     // Meaning if the first CalculateSomethingRecursive is returns also the first factor variable will be removed from the stack.
 }
 ```
+
+Variables on the stack are always thread-safe.
+
 ## Heap
 
-Describe me
+Variables on the heap are not thread-safe.
