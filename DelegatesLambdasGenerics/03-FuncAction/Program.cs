@@ -12,9 +12,9 @@ Console.WriteLine("time elapsed: "+ watch.Elapsed);
 MeasureTime(() => CountToNearlyInfinity());
 MeasureTime(CountToNearlyInfinity);
 
-// This is the definition of an Action.
-// It takes no paremeters and returns void.
+// This is the definition of an Action. It returns ALWAYS void.
 // delegate void Action(); 
+// delegate void Action<in T1, in T2, ...>(T1 arg1, T2 arg2, ...); 
 
 System.Console.WriteLine($"The result is: {MeasureTimeFunc(() => CalculateSomeResult())}");
 
